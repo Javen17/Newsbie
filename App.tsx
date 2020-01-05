@@ -17,9 +17,7 @@ export default function App() {
   }}
 />
 
-     <ScrollView >
-      <CardList></CardList>
-      </ScrollView>
+    <CardList></CardList>
   </SafeAreaView>
   );
 }
