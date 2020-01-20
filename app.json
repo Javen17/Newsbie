@@ -24,7 +24,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
-    }
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.Newsbie"
+    },
+    "android": {
+     "package": "com.yourcompany.your.Newsbie"
+   }
   }
 }

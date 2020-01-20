@@ -1,39 +1,16 @@
 import React from 'react';
-import { StyleSheet, Text, View , Image , SafeAreaView, ScrollView , FlatList } from 'react-native';
-import { Header } from 'react-native-elements'
-import CardList from './components/CardList'
-
-export default function App() {
-  return (
-
-    <SafeAreaView style={styles.container}>
-
-    <Header
-  statusBarProps={{ barStyle: 'light-content' }}
-  centerComponent={{ text: 'Newsbie', style: { color: '#fff'} }}
-  containerStyle={{
-    backgroundColor: "#0099FF",
-    justifyContent: 'space-around',
-  }}
-/>
-
-    <CardList></CardList>
-  </SafeAreaView>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  image: {
-    height: 300 ,
-    width: 300,
-  }
+import {createAppContainer} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
+import HomeScreen from './components/screens/HomeScreen'
+import SearchScreen from './components/screens/SearchScreen'
 
 
+const MainNavigator = createStackNavigator({
+  Home: {screen: HomeScreen,  navigationOptions: {headerShown: false,}},
+  Search: {screen: SearchScreen,   navigationOptions: {headerShown: false,}},
 });
+
+const App = createAppContainer(MainNavigator);
+
+
+export default App;

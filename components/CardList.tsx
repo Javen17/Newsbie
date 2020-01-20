@@ -1,6 +1,6 @@
 import React from 'react';
 import { FlatList, ActivityIndicator, Text, View, Image, StyleSheet, TouchableOpacity, TouchableNativeFeedback, Platform, Linking } from 'react-native';
-import { Card, ListItem, Button, Icon } from 'react-native-elements'
+import { Card, Button, Icon } from 'react-native-elements'
 
 export default class CardList extends React.Component {
 
@@ -34,6 +34,9 @@ export default class CardList extends React.Component {
           lastVisible: responseJson.articles[responseJson.articles.length - 1],
           page: this.state.page + 1,
         })
+
+        return responseJson.articles
+
       }).catch((error) => {
         console.error(error);
       });
