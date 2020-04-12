@@ -1,15 +1,29 @@
 import React from 'react'
-import { Header, SearchBar} from 'react-native-elements'
-import {SafeAreaView , StyleSheet} from 'react-native'
+import {SearchBar} from 'react-native-elements'
+import {SafeAreaView , StyleSheet , ToastAndroid} from 'react-native'
+import BaseNetwork from '../../network/BaseNetwork'
+import CardList from '../layout/molecules/CardList';
 
 class SearchScreen extends React.Component {
+  
+  baseNetwork: BaseNetwork;
+
+  constructor(props) {
+    super(props); 
+    this.baseNetwork = new BaseNetwork;
+  }
 
   state = {
     search: '',
+    dataSource : []
   };
 
-  updateSearch = search => {
+  updateSearch = async search => {
     this.setState({ search });
+    ToastAndroid.show( this.state.search , ToastAndroid.SHORT);
+    this.baseNetwork.modifiers.q  = search;
+    let results = await this.baseNetwork.buildFetch();
+    this.setState({dataSource : [...results]});
   };
 
 
@@ -32,7 +46,11 @@ class SearchScreen extends React.Component {
         placeholder="Type Here..."
         onChangeText={this.updateSearch}
         value={search}
+        containerStyle = {styles.searchBar}
+        inputContainerStyle = {styles.inputContainer}
+        lightTheme = {true}
       />
+      <CardList baseNetwork = {this.baseNetwork} dataSource = {this.state.dataSource} key = {this.state.search}></CardList>
      </SafeAreaView>
      );
   }
@@ -49,8 +67,13 @@ const styles = StyleSheet.create({
 
   searchBar: {
     backgroundColor: "#0099FF",
-    width: 100,
-  }
+    paddingTop: 35
+  },
+
+  inputContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 25
+  },
 
 });
 

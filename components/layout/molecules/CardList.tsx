@@ -1,29 +1,58 @@
 import React from 'react';
 import { FlatList, ActivityIndicator, Text, View, Image, StyleSheet, TouchableOpacity, TouchableNativeFeedback, Platform, Linking } from 'react-native';
 import { Card, Button, Icon } from 'react-native-elements'
+import CustomCard from '../atoms/CustomCard';
+import BaseNetwork from '../../../network/BaseNetwork';
 
 export default class CardList extends React.Component {
+
+  baseNetwork: BaseNetwork;
 
   constructor(props) {
     super(props);
     this.state = {
-      dataSource: [] ,
+      dataSource: props.dataSource ,
       isLoading: true,
       page: 1,
+      key: props.key
     }
+    this.baseNetwork = props.baseNetwork;
   }
 
   componentDidMount() {
-    return this.fetchData(this.state.page)
+    return this.fetchData();
   }
 
-  async fetchData(page) {
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.key !== state.key) {
+      return {
+        dataSource : props.dataSource
+      };
+    }
+    return null;
+  }
+
+  async fetchData() {
 
     this.setState({
       isLoading: true,
     })
 
-    let data = await fetch('https://newsapi.org/v2/top-headlines?' + 'country=us&' + 'apiKey=0f7401ca2c194f07866f93c4911370a4' + '&page=' + this.state.page)
+    console.log(this.state.page);
+
+    this.baseNetwork.page = this.state.page;
+    let data = await this.baseNetwork.buildFetch();
+
+    this.setState({
+      isLoading: false,
+      dataSource: [...this.state.dataSource , ...data.articles],
+      lastVisible: data.articles[data.articles.length - 1],
+      page: this.state.page + 1,
+    })
+
+
+    /*let data = await fetch('https://newsapi.org/v2/top-headlines?' + 'country=us&' + 'apiKey=0f7401ca2c194f07866f93c4911370a4' + '&page=' + this.state.page)
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -39,7 +68,7 @@ export default class CardList extends React.Component {
 
       }).catch((error) => {
         console.error(error);
-      });
+      });*/
 
     return data
   }
@@ -91,68 +120,3 @@ export default class CardList extends React.Component {
     );
   }
 }
-
-
-let CustomCard = (props) => {
-
-  let card = (<Card key = {props.index} title={props.title} containerStyle={styles.container} titleStyle={styles.title} dividerStyle={styles.divider}>
-    <View>
-      <Image
-        style={styles.image}
-        resizeMode="cover"
-        source={{ uri: props.urlToImage }}
-      />
-      <Text style={styles.subtitle}>{props.content}</Text>
-    </View>
-  </Card>)
-
-  if (Platform.OS === 'android') {
-    card = (<TouchableNativeFeedback onPress={() => { props.onPressButton(props.url) }}>
-      {card}
-    </TouchableNativeFeedback>)
-  }
-  else {
-    <TouchableOpacity onPress={() => { props.onPressButton(props.url) }} activeOpacity={0.5}>
-      {card}
-    </TouchableOpacity>
-  }
-
-
-  return card
-}
-
-
-const styles = StyleSheet.create({
-  image: {
-    flex: 1,
-    height: 200,
-    marginBottom: 5,
-    marginTop: 0,
-  },
-
-  container: {
-    borderRadius: 25,
-    padding: 0
-  },
-
-  title: {
-    padding: 10,
-    marginBottom: 0,
-    backgroundColor: "#0099FF",
-    color: "white",
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25
-
-  },
-
-  divider: {
-    marginBottom: 0,
-  },
-
-
-  subtitle: {
-    padding: 15
-  }
-
-
-});

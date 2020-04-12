@@ -1,17 +1,23 @@
 import React from 'react';
-import { StyleSheet, Text, View , Image , SafeAreaView, ScrollView , FlatList } from 'react-native';
-import CardList from '../CardList'
-import NavigationButton from './layout/NavigationButton'
-import CustomHeader from '../layout/CustomHeader'
-import { Header } from 'react-native-elements'
+import { StyleSheet, SafeAreaView } from 'react-native';
+import CardList from '../layout/molecules/CardList'
+import CustomHeader from '../layout/atoms/CustomHeader'
+import BaseNetwork from '../../network/BaseNetwork';
 
 class HomeScreen extends React.Component {
+
+  baseNetwork : BaseNetwork
+
+  constructor(props){
+    super(props);
+    this.baseNetwork = new BaseNetwork;
+  }
 
   render() {
     return (
       <SafeAreaView style={styles.container}>
         <CustomHeader navigation = {this.props.navigation}/>
-        <CardList></CardList>
+        <CardList baseNetwork = {this.baseNetwork} dataSource = {[]} key = {1}></CardList>
       </SafeAreaView>);
   }
 }
