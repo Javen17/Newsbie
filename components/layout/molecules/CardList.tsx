@@ -23,7 +23,6 @@ export default class CardList extends React.Component {
     return this.fetchData();
   }
 
-
   static getDerivedStateFromProps(props, state) {
     if (props.key !== state.key) {
       return {
@@ -39,9 +38,8 @@ export default class CardList extends React.Component {
       isLoading: true,
     })
 
-    console.log(this.state.page);
-
     this.baseNetwork.page = this.state.page;
+    console.log(this.baseNetwork.page);
     let data = await this.baseNetwork.buildFetch();
 
     this.setState({

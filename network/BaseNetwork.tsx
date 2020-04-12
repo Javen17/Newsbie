@@ -35,8 +35,7 @@ export default class BaseNetwork{
                 flag += 1;
             }
             
-            this.finalUrl = this.finalUrl + "&" + this.apiKey;
-
+            this.finalUrl = this.finalUrl + "&" + this.apiKey + "&page=" + this.page;
             return await this.fetchApi()
 
         }
@@ -45,7 +44,6 @@ export default class BaseNetwork{
     fetchApi = async () => {
        let data = await fetch(this.finalUrl);
        let jsonData = await data.json();
-       console.log(jsonData);
        return jsonData
     }
 }
